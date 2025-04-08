@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Teste de Envio</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 500px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            input,
+            textarea,
+            button {
+                width: 100%;
+                margin-bottom: 10px;
+                padding: 8px;
+            }
+            button {
+                background: #007bff;
+                color: white;
+                border: none;
+                cursor: pointer;
+            }
+            hr {
+                margin: 40px 0;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>Enviar E-mail</h1>
+        <form id="emailForm">
+            <input type="email" id="to" placeholder="Destinatário" required />
+            <input type="text" id="subject" placeholder="Assunto" required />
+            <textarea id="html" rows="5" placeholder="Conteúdo"></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+        <div id="result"></div>
+
+        <hr />
+
+        <h1>Enviar WhatsApp (Simulado)</h1>
+        <form id="whatsappForm">
+            <input
+                type="text"
+                id="waTo"
+                placeholder="Número de telefone (ex: +5521999999999)"
+                required
+            />
+            <textarea
+                id="waBody"
+                rows="4"
+                placeholder="Mensagem"
+                required
+            ></textarea>
+            <button type="submit">Enviar WhatsApp</button>
+        </form>
+        <div id="waResult"></div>
+
+        <script>
+            // Email
+            document
+                .getElementById("emailForm")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const to = document.getElementById("to").value;
+                    const subject = document.getElementById("subject").value;
+                    const html = document.getElementById("html").value;
+
+                    try {
+                        const response = await axios.post(
+                            "http://localhost:3000/notifications/email",
+                            { to, subject, html },
+                            {
+                                headers: { "Content-Type": "application/json" },
+                            }
+                        );
+                        document.getElementById(
+                            "result"
+                        ).innerHTML = `<p>Sucesso: ${JSON.stringify(
+                            response.data
+                        )}</p>`;
+                    } catch (error) {
+                        document.getElementById(
+                            "result"
+                        ).innerHTML = `<p>Erro: ${error.message}</p>`;
+                    }
+                });
+
+            // WhatsApp
+            document
+                .getElementById("whatsappForm")
+                .addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    const to = document.getElementById("waTo").value;
+                    const body = document.getElementById("waBody").value;
+
+                    try {
+                        const response = await axios.post(
+                            "http://localhost:3000/notifications/whatsapp",
+                            { to, body },
+                            {
+                                headers: { "Content-Type": "application/json" },
+                            }
+                        );
+                        document.getElementById(
+                            "waResult"
+                        ).innerHTML = `<p>Sucesso: ${JSON.stringify(
+                            response.data
+                        )}</p>`;
+                    } catch (error) {
+                        document.getElementById(
+                            "waResult"
+                        ).innerHTML = `<p>Erro: ${error.message}</p>`;
+                    }
+                });
+        </script>
+    </body>
+</html>

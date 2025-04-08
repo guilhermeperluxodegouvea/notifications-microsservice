@@ -1,0 +1,17 @@
+# Arquivos sensíveis
+.env
+.env.local
+
+# Dependências
+node_modules/
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+
+# Configurações do IDE
+.vscode/
+.idea/
+
+# Build do TypeScript
+dist/
